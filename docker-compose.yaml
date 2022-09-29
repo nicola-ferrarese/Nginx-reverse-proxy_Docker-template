@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  proxy:
+    container_name: proxy_container
+    hostname: proxy
+    build:
+      context: .
+      dockerfile: proxy/Dockerfile
+    image: 'mynginx'
+    networks:
+      default:
+        aliases:
+          - proxy_server
+    ports:
+      - 8080:80
+    environment:
+      - TYPE=proxy
+  service_a:
+    container_name: serv_a_container
+    image: 'mynginx'
+    build:
+      dockerfile: service_a/Dockerfile
+    networks:
+      default:
+        aliases:
+          - servicea
+    environment:
+      - TYPE=service_a
+# service_b:
+#  container_name: serv_b_container
+#  build:
+#    context: .
+#    dockerfile: ./service_b/Dockerfile
+#  image: 'mynginx'
+networks:
+  default:
+    name: proxy-dev
+    external: true
