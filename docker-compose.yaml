@@ -7,10 +7,6 @@ services:
     build:
       context: proxy
     image: mynginx_pr
-    networks:
-      default:
-        aliases:
-          - proxy_server
     ports:
       - 8080:80
     environment:

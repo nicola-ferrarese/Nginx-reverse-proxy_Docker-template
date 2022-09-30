@@ -1,19 +1,22 @@
 
 ### Description
 This basic project is composed by three services:
-* Proxy
-  * Service A
-  * Service B
+* **Proxy** (_https self-signed certificate_)
+* **Service A** (Existing project) (_http_)
+* **Service B** (Telemetry service) (_http_)
 
-**_Only one service is exposed to the localhost by 8080 port, all services are on different container in the same network (not the default bridge)_**
+this arrangement allows to connect via SSL to the proxy, while the services will communicate using http.
 
-The only service exposed is Proxy, accessible at `0.0.0.0:8080`
+Since the only access point to the network is through the proxy server the project can be assumed secure.
 
-Once a request is made to the above URL, it is forwarded to Service A, which is accessible also at `0.0.0.0:8080/api_a`
+#### Detail
+The project will redirect the connection to `<proxy IP>` and `<proxy IP>/api_a` to **service A**, 
 
-`0.0.0.0:8080/api_b` to be redirected to Service B
-
-
+**Service B** can be accessed via `<proxy IP>/api_b`
+```
+- Service A will be the existing project,
+- Service B the telemetry service.
+```
 
 ### Setup
 
@@ -26,3 +29,15 @@ docker network create proxy-dev
 docker-compose build    (opt.) --no-cache
 docker-compose up       (opt.) --force-recreate
 ```
+- Get the ip address of the Proxy container:
+```shell
+docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' proxy_container
+```
+- Connect via browser:
+```
+<proxyIP> or
+<proxyIP>/api_a or
+<proxyIP>/api_b 
+```
+
+you will be automatically redirected to the https.
