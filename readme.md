@@ -5,7 +5,7 @@ This basic project is composed by three services:
   * Service A
   * Service B
 
-**_Only one  is service exposed to the localhost by 8080 port, all services are on different container in the same network_**
+**_Only one service is exposed to the localhost by 8080 port, all services are on different container in the same network (not the default bridge)_**
 
 The only service exposed is Proxy, accessible at `0.0.0.0:8080`
 
