@@ -5,9 +5,8 @@ services:
     container_name: proxy_container
     hostname: proxy
     build:
-      context: .
-      dockerfile: proxy/Dockerfile
-    image: 'mynginx'
+      context: proxy
+    image: mynginx_pr
     networks:
       default:
         aliases:
@@ -18,21 +17,26 @@ services:
       - TYPE=proxy
   service_a:
     container_name: serv_a_container
-    image: 'mynginx'
+    image: mynginx_sv_a
     build:
-      dockerfile: service_a/Dockerfile
+      context: service_a
     networks:
       default:
         aliases:
-          - servicea
+          - service_a
     environment:
       - TYPE=service_a
-# service_b:
-#  container_name: serv_b_container
-#  build:
-#    context: .
-#    dockerfile: ./service_b/Dockerfile
-#  image: 'mynginx'
+  service_b:
+    container_name: serv_b_container
+    image: mynginx_sv_b
+    build:
+      context: service_b
+    networks:
+      default:
+        aliases:
+          - service_b
+    environment:
+      - TYPE=service_b
 networks:
   default:
     name: proxy-dev
